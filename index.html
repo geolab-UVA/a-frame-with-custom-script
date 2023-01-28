@@ -8,7 +8,42 @@
     <title>A-frame scene with custom logic</title>
   </head>
   <body>
-    <a-scene>
+    <script>
+      // Log component as descibed by https://aframe.io/docs/1.4.0/introduction/writing-a-component.html#example-log-component
+      AFRAME.registerComponent("log", {
+        schema: { type: "string" },
+
+        init: function () {
+          var stringToLog = this.data;
+          console.log(stringToLog);
+        }
+      });
+    </script>
+    <script>
+      AFRAME.registerComponent("move-with-rig", {
+        schema: { type: "selector", default: "#rig" },
+
+        init: function () {
+          this.rig = this.data;
+          var rig = this.rig;
+          console.log(rig);
+          console.log(rig.object3D.position);
+          this.tick = AFRAME.utils.throttleTick(this.tick, 10, this);
+          //this.currentpos = this.el.object3D.position;
+        },
+        tick: function (time, timeDelta) {
+          var rig = this.rig;
+          //console.log(this.el.object3D.position);
+          this.el.object3D.position.x = rig.object3D.position.x;
+          this.el.object3D.position.y = rig.object3D.position.y + 1;
+          this.el.object3D.position.z = rig.object3D.position.z - 5;
+          this.el.object3D.rotation.x = rig.object3D.position.z / 1;
+          this.el.object3D.rotation.z = rig.object3D.position.x / 2;
+        }
+      });
+    </script>
+
+    <a-scene log="Hello, Scene!">
       <!-- This is the camera -->
       <a-entity id="rig" wasd-controls position="0 1.6 0">
         <a-entity id="camera" camera="fov:55" look-controls></a-entity>
@@ -16,6 +51,7 @@
 
       <!-- These are two boxes-->
       <a-entity
+        log="Hello, Box1!"
         id="Box 1"
         geometry="primitive: box"
         material="color: red"
@@ -24,6 +60,8 @@
       ></a-entity>
 
       <a-entity
+        log="Hello! Who am I?"
+        move-with-rig
         id="Box 2"
         geometry="primitive: box"
         material="color: blue"
