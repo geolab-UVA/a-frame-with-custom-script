@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <!-- Next we include the physics library https://github.com/c-frame/aframe-physics-system
+      See https://github.com/c-frame/aframe-physics-system/blob/master/CannonDriver.md#installation
+      For now we use the simpler Cannon.js backend that is slower but easier to use.
+    -->
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-physics-system@v4.2.2/dist/aframe-physics-system.min.js"></script>
+    <title>A-frame scene with physics</title>
+  </head>
+  <body>
+    <!-- To enable debugging pass physics="debug: true" to the a-scene -->
+    <a-scene physics>
+      <!-- This is the camera -->
+      <a-entity id="rig" wasd-controls position="0 1.6 0">
+        <a-entity id="camera" camera="fov:55" look-controls></a-entity>
+      </a-entity>
+
+      <!-- These are two boxes-->
+      <!-- 
+        In Cannon.js physics objects subject to physics can be of two types:
+        - static-body
+        - dynamic-body
+        obtained by adding the corresponing component to an object
+        See https://github.com/c-frame/aframe-physics-system/blob/master/CannonDriver.md#components
+      -->
+      <a-entity
+        id="Box 1"
+        dynamic-body
+        geometry="primitive: box"
+        material="color: red"
+        position="1 10 -3"
+        rotation="0 0 50"
+      ></a-entity>
+
+      <a-entity
+        id="Box 2"
+        dynamic-body
+        geometry="primitive: box"
+        material="color: blue"
+        position="-1 5 -5"
+        rotation="0 45 0"
+      ></a-entity>
+
+      <!-- This is the floor and sky (making it a more pleasant color than white)-->
+      <a-entity
+        static-body
+        geometry="primitive: plane; width: 20; height: 20"
+        material="color: #7BC8A4; side: double"
+        height="100"
+        width="100"
+        rotation="-90 0 0"
+      ></a-entity>
+
+      <a-sky color="#0C0C0C"></a-sky>
+    </a-scene>
+  </body>
+</html>
