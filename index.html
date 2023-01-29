@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@fb96ab2/dist/aframe-extras.min.js"></script>
+
     <title>A-frame scene with custom logic</title>
   </head>
   <body>
@@ -26,24 +28,45 @@
 
         init: function () {
           this.rig = this.data;
+          this.camera = this.rig.querySelector("[camera]");
+          console.log("rig=");
+          console.log(this.rig);
+          console.log("camera=");
+          console.log(this.camera);
           this.tick = AFRAME.utils.throttleTick(this.tick, 10, this);
+          this.cameraPos = new THREE.Vector3();
+          console.log("cameraPos=");
+          console.log(this.cameraPos);
         },
         tick: function (time, timeDelta) {
+          var elObj = this.el.object3D;
           var rig = this.rig;
-          var objectRotation = this.el.object3D.rotation;
-          var objectPosition = this.el.object3D.position;
-          var rigPosition = rig.object3D.position;
-          objectPosition.x = rigPosition.x;
-          objectPosition.y = rigPosition.y;
-          objectPosition.z = rigPosition.z - 3;
+          var rigObj = this.rig.object3D;
+          var camera = this.camera;
+          var cameraObj = this.camera.object3D;
+          var elObjRotation = elObj.rotation;
+          var elObjPosition = elObj.position;
+          var rigObjPosition = rigObj.position;
+          var cameraPos = this.cameraPos;
+          cameraObj.getWorldPosition(cameraPos);
+          //console.log(cameraPos);
+          elObjPosition.x = cameraPos.x;
+          elObjPosition.y = cameraPos.y + 1;
+          elObjPosition.z = cameraPos.z - 3;
+          elObjRotation.z = cameraPos.z;
         }
       });
     </script>
 
     <a-scene log="Hello, Scene!">
       <!-- This is the camera -->
-      <a-entity id="rig" wasd-controls position="0 1.6 0">
-        <a-entity id="camera" camera="fov:55" look-controls></a-entity>
+      <a-entity id="rig" movement-controls position="0 0 0">
+        <a-entity
+          id="main-camera"
+          camera="fov:55"
+          look-controls
+          position="0 1.6 0"
+        ></a-entity>
       </a-entity>
 
       <!-- These are two boxes-->
