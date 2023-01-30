@@ -88,8 +88,8 @@
       elRotation.z = cameraPosition.z;
       */
           var dist = elPosition.distanceToSquared(cameraPosition);
-          if (dist < 16) {
-            this.localTime += (timeDelta * 20) / (dist * dist * dist);
+          if (dist < 25) {
+            this.localTime += (timeDelta * 400) / (dist * dist * dist * dist);
             elPosition.y = 2 + Math.sin(this.localTime) / 10;
             elPosition.x = Math.sin(this.localTime * 1.5 + 2) / 15;
           }
@@ -111,7 +111,7 @@
       <a-entity
         id="head"
         custom-logic-vibrate
-        position="0 2 -3"
+        position="0 2 -5"
         rotation="0 0 0"
         geometry="primitive: sphere; radius: 1"
         material="color: red"
