@@ -57,6 +57,7 @@
           this.rig = document.querySelector("a-scene > a-entity#rig");
           this.camera = this.rig.querySelector("[camera]");
           this.tick = AFRAME.utils.throttleTick(this.tick, 10, this);
+          this.localTime = 0;
 
           // Initialize local variables (types)
           this.cameraPosition = new THREE.Vector3();
@@ -86,9 +87,11 @@
       elPosition.z = cameraPosition.z - 3;
       elRotation.z = cameraPosition.z;
       */
-          if (elPosition.distanceToSquared(cameraPosition) < 10) {
-            elPosition.y = 2 + Math.sin(time / 10) / 20;
-            elPosition.x = Math.sin(time / 12) / 20;
+          var dist = elPosition.distanceToSquared(cameraPosition);
+          if (dist < 16) {
+            this.localTime += (timeDelta * 20) / (dist * dist * dist);
+            elPosition.y = 2 + Math.sin(this.localTime) / 10;
+            elPosition.x = Math.sin(this.localTime * 1.5 + 2) / 15;
           }
         }
       });
