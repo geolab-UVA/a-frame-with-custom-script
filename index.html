@@ -11,7 +11,7 @@
   </head>
   <body>
     <script>
-      AFRAME.registerComponent("custom-logic", {
+      AFRAME.registerComponent("custom-logic-eye-follow", {
         schema: { type: "string" },
         init: function () {
           this.rig = document.querySelector("a-scene > a-entity#rig");
@@ -41,10 +41,55 @@
           const elPosition = elObject3D.position;
 
           // Custom logic starts
-          elPosition.x = cameraPosition.x;
-          elPosition.y = cameraPosition.y + 1;
+          /*  elPosition.x = cameraPosition.x;
+          elPosition.y = cameraPosition.y;
           elPosition.z = cameraPosition.z - 3;
           elRotation.z = cameraPosition.z;
+          */
+          elObject3D.lookAt(cameraPosition);
+        }
+      });
+    </script>
+    <script>
+      AFRAME.registerComponent("custom-logic-vibrate", {
+        schema: { type: "string" },
+        init: function () {
+          this.rig = document.querySelector("a-scene > a-entity#rig");
+          this.camera = this.rig.querySelector("[camera]");
+          this.tick = AFRAME.utils.throttleTick(this.tick, 10, this);
+
+          // Initialize local variables (types)
+          this.cameraPosition = new THREE.Vector3();
+        },
+
+        tick: function (time, timeDelta) {
+          // Add references to many of the objects in play
+          const rig = this.rig;
+          const rigObject3D = this.rig.object3D;
+          const rigPosition = rigObject3D.position;
+          const rigRotation = rigObject3D.rotation;
+
+          const camera = this.camera;
+          const cameraObject3D = this.camera.object3D;
+          const cameraPosition = this.cameraPosition;
+          // Store the world position of the camer in cameraPosition
+          cameraObject3D.getWorldPosition(cameraPosition);
+
+          const el = this.el;
+          const elObject3D = this.el.object3D;
+          const elRotation = elObject3D.rotation;
+          const elPosition = elObject3D.position;
+
+          // Custom logic starts
+          /*  elPosition.x = cameraPosition.x;
+      elPosition.y = cameraPosition.y;
+      elPosition.z = cameraPosition.z - 3;
+      elRotation.z = cameraPosition.z;
+      */
+          if (elPosition.distanceToSquared(cameraPosition) < 10) {
+            elPosition.y = 2 + Math.sin(time / 10) / 20;
+            elPosition.x = Math.sin(time / 12) / 20;
+          }
         }
       });
     </script>
@@ -60,23 +105,56 @@
         ></a-entity>
       </a-entity>
 
-      <!-- These are two boxes-->
       <a-entity
-        id="box1"
-        geometry="primitive: box"
+        id="head"
+        custom-logic-vibrate
+        position="0 2 -3"
+        rotation="0 0 0"
+        geometry="primitive: sphere; radius: 1"
         material="color: red"
-        position="1 2 -3"
-        rotation="0 0 50"
-      ></a-entity>
+      >
+        <a-entity
+          id="right-eye"
+          custom-logic-eye-follow
+          geometry="primitive: sphere; radius: 0.1"
+          material="color: white"
+          position="-0.5 0.2 0.85"
+          rotation="0 0 0"
+        >
+          <a-entity
+            id="right-pupil"
+            geometry="primitive: sphere; radius: 0.02"
+            material="color: black"
+            position="0 0 0.09"
+            rotation="0 0 0"
+          ></a-entity
+        ></a-entity>
 
-      <a-entity
-        custom-logic
-        id="box2"
-        geometry="primitive: box"
-        material="color: blue"
-        position="-1 1 -5"
-        rotation="0 45 0"
-      ></a-entity>
+        <a-entity
+          id="left-eye"
+          custom-logic-eye-follow
+          geometry="primitive: sphere; radius: 0.1"
+          material="color: white"
+          position="+0.5 0.2 0.85"
+          rotation="0 0 0"
+        >
+          <a-entity
+            id="left-pupil"
+            geometry="primitive: sphere; radius: 0.02"
+            material="color: black"
+            position="0 0 0.09"
+            rotation="0 0 0"
+          ></a-entity>
+        </a-entity>
+
+        <a-entity
+          id="nose"
+          geometry="primitive: cone; radiusBottom: 0.3; radiusTop: 0.1; height:0.3"
+          material="color: green"
+          position="0 0 1"
+          rotation="90 0 0"
+        ></a-entity>
+      </a-entity>
 
       <!-- This is the floor and sky (making it a more pleasant color than white)-->
       <a-entity
