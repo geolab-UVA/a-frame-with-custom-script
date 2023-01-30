@@ -7,58 +7,49 @@
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@fb96ab2/dist/aframe-extras.min.js"></script>
 
-    <title>A-frame scene with custom logic</title>
+    <title>A-frame scene with custom logic (VR-compatible)</title>
   </head>
   <body>
     <script>
-      // Log component as descibed by https://aframe.io/docs/1.4.0/introduction/writing-a-component.html#example-log-component
-      AFRAME.registerComponent("log", {
+      AFRAME.registerComponent("custom-logic", {
         schema: { type: "string" },
-
         init: function () {
-          var stringToLog = this.data;
-          console.log(stringToLog);
-        }
-      });
-    </script>
-
-    <script>
-      AFRAME.registerComponent("move-with-rig", {
-        schema: { type: "selector", default: "#rig" },
-
-        init: function () {
-          this.rig = this.data;
+          this.rig = document.querySelector("a-scene > a-entity#rig");
           this.camera = this.rig.querySelector("[camera]");
-          console.log("rig=");
-          console.log(this.rig);
-          console.log("camera=");
-          console.log(this.camera);
           this.tick = AFRAME.utils.throttleTick(this.tick, 10, this);
-          this.cameraPos = new THREE.Vector3();
-          console.log("cameraPos=");
-          console.log(this.cameraPos);
+
+          // Initialize local variables (types)
+          this.cameraPosition = new THREE.Vector3();
         },
+
         tick: function (time, timeDelta) {
-          var elObj = this.el.object3D;
-          var rig = this.rig;
-          var rigObj = this.rig.object3D;
-          var camera = this.camera;
-          var cameraObj = this.camera.object3D;
-          var elObjRotation = elObj.rotation;
-          var elObjPosition = elObj.position;
-          var rigObjPosition = rigObj.position;
-          var cameraPos = this.cameraPos;
-          cameraObj.getWorldPosition(cameraPos);
-          //console.log(cameraPos);
-          elObjPosition.x = cameraPos.x;
-          elObjPosition.y = cameraPos.y + 1;
-          elObjPosition.z = cameraPos.z - 3;
-          elObjRotation.z = cameraPos.z;
+          // Add references to many of the objects in play
+          const rig = this.rig;
+          const rigObject3D = this.rig.object3D;
+          const rigPosition = rigObject3D.position;
+          const rigRotation = rigObject3D.rotation;
+
+          const camera = this.camera;
+          const cameraObject3D = this.camera.object3D;
+          const cameraPosition = this.cameraPosition;
+          // Store the world position of the camer in cameraPosition
+          cameraObject3D.getWorldPosition(cameraPosition);
+
+          const el = this.el;
+          const elObject3D = this.el.object3D;
+          const elRotation = elObject3D.rotation;
+          const elPosition = elObject3D.position;
+
+          // Custom logic starts
+          elPosition.x = cameraPosition.x;
+          elPosition.y = cameraPosition.y + 1;
+          elPosition.z = cameraPosition.z - 3;
+          elRotation.z = cameraPosition.z;
         }
       });
     </script>
 
-    <a-scene log="Hello, Scene!">
+    <a-scene>
       <!-- This is the camera -->
       <a-entity id="rig" movement-controls position="0 0 0">
         <a-entity
@@ -79,7 +70,7 @@
       ></a-entity>
 
       <a-entity
-        move-with-rig
+        custom-logic
         id="box2"
         geometry="primitive: box"
         material="color: blue"
