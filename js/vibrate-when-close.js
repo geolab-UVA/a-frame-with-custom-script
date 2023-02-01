@@ -35,25 +35,29 @@ AFRAME.registerComponent("vibrate-when-close", {
     const el = this.el;
     const elObject3D = el.object3D;
     // const elRotation = elObject3D.rotation;
-    const elPosition = elObject3D.position;
+    // const elPosition = elObject3D.position;
+    // const elGlobalPosition = this.elGlobalPosition;
+    // elObject3D.getWorldPosition(elGlobalPosition);
+    // # Custom logic
+
     const elGlobalPosition = this.elGlobalPosition;
     elObject3D.getWorldPosition(elGlobalPosition);
-    // # Custom logic
-    const basePosition = this.basePosition;
-    const displacement = this.displacement;
-
     let distSquared = elGlobalPosition.distanceToSquared(cameraPosition);
 
     if (distSquared < 25) {
       this.localTime +=
         timeDelta *
         Math.min(0.04, 3 / (distSquared * distSquared * distSquared));
+
+      const displacement = this.displacement;
       displacement.set(
         Math.sin(this.localTime) / 10,
         Math.sin(this.localTime * 1.5 + 2) / 15,
         0
       );
-      //console.log(elGlobalPosition);
+
+      const basePosition = this.basePosition;
+      const elPosition = elObject3D.position;
       elPosition.addVectors(basePosition, displacement);
     }
   }
