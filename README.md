@@ -1,4 +1,4 @@
-# A basic A-Frame scene with custom logic
+# A (VR-compatible) A-Frame scene with custom logic
 
 This page contains a basic a-frame scene with custom logic. Custom logic in a-frame is implemented by defining a [component](https://aframe.io/docs/1.4.0/introduction/entity-component-system.html#concept) as explained [here](https://aframe.io/docs/1.4.0/introduction/writing-a-component.html)
 
@@ -20,5 +20,5 @@ TODO
 
 # Resources
 
-- Documentation for [a-frame](https://aframe.io/docs/master/introduction/)
+- Documentation for [A-Frame](https://aframe.io/docs/master/introduction/)
 - Documentation [component API](https://aframe.io/docs/1.4.0/core/component.html)

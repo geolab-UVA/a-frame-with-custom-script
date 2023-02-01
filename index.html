@@ -5,63 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <title>A-frame scene with custom logic</title>
+    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@fb96ab2/dist/aframe-extras.min.js"></script>
+
+    <title>A-frame scene with custom script (VR-compatible)</title>
+    <script src="js/rotate-follow-camera.js"></script>
   </head>
   <body>
-    <script>
-      // Log component as descibed by https://aframe.io/docs/1.4.0/introduction/writing-a-component.html#example-log-component
-      AFRAME.registerComponent("log", {
-        schema: { type: "string" },
-
-        init: function () {
-          var stringToLog = this.data;
-          console.log(stringToLog);
-        }
-      });
-    </script>
-
-    <script>
-      AFRAME.registerComponent("move-with-rig", {
-        schema: { type: "selector", default: "#rig" },
-
-        init: function () {
-          this.rig = this.data;
-          this.tick = AFRAME.utils.throttleTick(this.tick, 10, this);
-        },
-        tick: function (time, timeDelta) {
-          var rig = this.rig;
-          var objectRotation = this.el.object3D.rotation;
-          var objectPosition = this.el.object3D.position;
-          var rigPosition = rig.object3D.position;
-          objectPosition.x = rigPosition.x;
-          objectPosition.y = rigPosition.y;
-          objectPosition.z = rigPosition.z - 3;
-        }
-      });
-    </script>
-
-    <a-scene log="Hello, Scene!">
+    <a-scene>
       <!-- This is the camera -->
-      <a-entity id="rig" wasd-controls position="0 1.6 0">
-        <a-entity id="camera" camera="fov:55" look-controls></a-entity>
+      <a-entity id="rig" movement-controls position="0 0 0">
+        <a-entity
+          id="main-camera"
+          camera="fov:55"
+          look-controls
+          position="0 1.6 0"
+        ></a-entity>
       </a-entity>
 
-      <!-- These are two boxes-->
-      <a-entity
-        id="box1"
-        geometry="primitive: box"
-        material="color: red"
-        position="1 2 -3"
-        rotation="0 0 50"
-      ></a-entity>
+      <a-entity id="head" position="0 2 -5" rotation="0 0 0">
+        <a-entity
+          id="head-sphere"
+          geometry="primitive: sphere; radius: 1"
+          material="color: red"
+        >
+          <a-entity
+            id="right-eye"
+            rotate-follow-camera
+            geometry="primitive: sphere; radius: 0.1"
+            material="color: white"
+            position="-0.5 0.2 0.85"
+            rotation="0 0 0"
+          >
+            <a-entity
+              id="right-pupil"
+              geometry="primitive: sphere; radius: 0.02"
+              material="color: black"
+              position="0 0 0.09"
+              rotation="0 0 0"
+            ></a-entity>
+          </a-entity>
 
-      <a-entity
-        move-with-rig
-        id="box2"
-        geometry="primitive: box"
-        material="color: blue"
-        position="-1 1 -5"
-        rotation="0 45 0"
+          <a-entity
+            id="left-eye"
+            rotate-follow-camera
+            geometry="primitive: sphere; radius: 0.1"
+            material="color: white"
+            position="+0.5 0.2 0.85"
+            rotation="0 0 0"
+          >
+            <a-entity
+              id="left-pupil"
+              geometry="primitive: sphere; radius: 0.02"
+              material="color: black"
+              position="0 0 0.09"
+              rotation="0 0 0"
+            ></a-entity>
+          </a-entity>
+
+          <a-entity
+            id="nose"
+            geometry="primitive: cone; radiusBottom: 0.3; radiusTop: 0.1; height:0.3"
+            material="color: green"
+            position="0 0 1"
+            rotation="90 0 0"
+          ></a-entity> </a-entity
       ></a-entity>
 
       <!-- This is the floor and sky (making it a more pleasant color than white)-->
