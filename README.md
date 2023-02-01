@@ -20,5 +20,5 @@ TODO
 
 # Resources
 
-- Documentation for [a-frame](https://aframe.io/docs/master/introduction/)
+- Documentation for [A-Frame](https://aframe.io/docs/master/introduction/)
 - Documentation [component API](https://aframe.io/docs/1.4.0/core/component.html)
