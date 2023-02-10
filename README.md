@@ -25,7 +25,7 @@ When a component is attached to an `<a-entity>` it creates a Javascript "object"
 
 The the `<a-entity>` can be accessed from within the attached component using `this.el`.
 The 3D object associated to an `<a-entity>` can be accessed throught the `el.Object3D` property of the element `el`
-So the component should access the 3D object throught `this.el.Object3D`
+So the component should access the 3D object throught `this.el.Object3D`. Some helpful functions of `Object3D` are documented in the [three.js docs](https://threejs.org/docs/#api/en/core/Object3D). A-Frame is based on the library [three.js](https://threejs.org/)
 
 
 # Resources
