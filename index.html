@@ -10,9 +10,14 @@
     <title>A-frame scene with custom script (VR-compatible)</title>
     <script src="js/rotate-follow-camera.js"></script>
   </head>
+
   <body>
     <a-scene>
-      <!-- This is the camera -->
+      <!-- 
+        The camera mounted on a rig.
+        The movement-controls component is coming from the aframe-extras library.
+        It integrates VR functionality
+      -->
       <a-entity id="rig" movement-controls position="0 0 0">
         <a-entity
           id="main-camera"
@@ -22,7 +27,7 @@
         ></a-entity>
       </a-entity>
 
-      <a-entity id="head" position="0 2 -5" rotation="0 0 0">
+      <a-entity id="head" position="0 2 -3" rotation="0 0 0">
         <a-entity
           id="head-sphere"
           geometry="primitive: sphere; radius: 1"
@@ -61,26 +66,24 @@
               rotation="0 0 0"
             ></a-entity>
           </a-entity>
-
           <a-entity
             id="nose"
             geometry="primitive: cone; radiusBottom: 0.3; radiusTop: 0.1; height:0.3"
             material="color: green"
             position="0 0 1"
             rotation="90 0 0"
-          ></a-entity> </a-entity
-      ></a-entity>
+          ></a-entity>
+        </a-entity>
+      </a-entity>
 
       <!-- This is the floor and sky (making it a more pleasant color than white)-->
       <a-entity
-        geometry="primitive: plane; width: 20; height: 20"
-        material="color: #7BC8A4; side: double"
-        height="100"
-        width="100"
+        geometry="primitive: plane; width: 10; height: 10"
+        material="color: #7B9894; side: double"
         rotation="-90 0 0"
       ></a-entity>
 
-      <a-sky color="#0C0C0C"></a-sky>
+      <a-sky color="#1C0C2C"></a-sky>
     </a-scene>
   </body>
 </html>
