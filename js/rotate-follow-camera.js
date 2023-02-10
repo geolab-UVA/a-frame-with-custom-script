@@ -21,7 +21,7 @@ AFRAME.registerComponent("rotate-follow-camera", {
     cameraObject3D.getWorldPosition(cameraPosition);
 
     //Look at camera
-    const Object3D = this.el.object3D;
-    Object3D.lookAt(cameraPosition);
+    const object3D = this.el.object3D;
+    object3D.lookAt(cameraPosition);
   }
 });
