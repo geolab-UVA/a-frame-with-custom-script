@@ -11,12 +11,6 @@ The component has
 - an `init` function
 - a `tick` function
 
-## The schema
-TODO
-## The init function
-TODO
-## The tick function
-TODO
 
 # Resources
 
