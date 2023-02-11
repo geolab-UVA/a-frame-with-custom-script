@@ -1,92 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@fb96ab2/dist/aframe-extras.min.js"></script>
 
-    <title>A-frame scene with custom script (VR-compatible)</title>
-    <script>
-      SILENT = false; // Enable debugging
-    </script>
-    <script src="js/rotate-follow-camera.js"></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>A-frame scene with custom script (VR-compatible)</title>
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/c-frame/aframe-extras@fb96ab2/dist/aframe-extras.min.js"></script>
 
-  <body>
-    <a-scene>
+
+  <script>
+    SILENT = false; // Enable debugging
+  </script>
+  <script src="js/rotate-follow-camera.js"></script>
+</head>
+
+<body>
+  <a-scene>
+
+    <a-entity id="rig" movement-controls position="0 0 0">
       <!-- 
-        The camera mounted on a rig.
-        The movement-controls component is coming from the aframe-extras library.
-        It integrates VR functionality
+        The rig contains the camera. The `movement-controls` component is coming from the aframe-extras library: it allows movement and integrates VR functionality.
       -->
-      <a-entity id="rig" movement-controls position="0 0 0">
-        <a-entity
-          id="main-camera"
-          camera="fov:55"
-          look-controls
-          position="0 1.6 0"
-        ></a-entity>
-      </a-entity>
+      <a-entity id="main-camera" camera="fov:55" look-controls position="0 1.6 0"></a-entity>
+      <!-- 
+      The main camera is positioned inside the rig at the height of 1.6 meters 
+      -->
+    </a-entity>
 
-      <a-entity id="head" position="0 2 -3" rotation="0 0 0">
-        <a-entity
-          id="head-sphere"
-          geometry="primitive: sphere; radius: 1"
-          material="color: red"
-        >
-          <a-entity
-            id="right-eye"
-            rotate-follow-camera
-            geometry="primitive: sphere; radius: 0.1"
-            material="color: white"
-            position="-0.5 0.2 0.85"
-            rotation="0 0 0"
-          >
-            <a-entity
-              id="right-pupil"
-              geometry="primitive: sphere; radius: 0.02"
-              material="color: black"
-              position="0 0 0.09"
-              rotation="0 0 0"
-            ></a-entity>
-          </a-entity>
 
-          <a-entity
-            id="left-eye"
-            rotate-follow-camera
-            geometry="primitive: sphere; radius: 0.1"
-            material="color: white"
-            position="+0.5 0.2 0.85"
-            rotation="0 0 0"
-          >
-            <a-entity
-              id="left-pupil"
-              geometry="primitive: sphere; radius: 0.02"
-              material="color: black"
-              position="0 0 0.09"
-              rotation="0 0 0"
-            ></a-entity>
-          </a-entity>
-          <a-entity
-            id="nose"
-            geometry="primitive: cone; radiusBottom: 0.3; radiusTop: 0.1; height:0.3"
-            material="color: green"
-            position="0 0 1"
-            rotation="90 0 0"
-          ></a-entity>
+    <!-- 
+     Here we create a head that consists of a red sphere with two white sphere eyes and a green truncated cone nose.
+    Each eye has a pupil (small black sphere)
+    Note the nested structure of the entities of the head. 
+    -->
+    <a-entity id="head" position="0 2 -3" rotation="0 0 0">
+      <!-- The head -->
+      <a-entity id="head-sphere" geometry="primitive: sphere; radius: 1" material="color: red">
+
+        <!-- The eyes -->
+
+        <a-entity id="right-eye" geometry="primitive: sphere; radius: 0.1" material="color: white"
+          position="-0.5 0.2 0.85" rotation="0 0 0" rotate-follow-camera>
+          <a-entity id="right-pupil" geometry="primitive: sphere; radius: 0.02" material="color: black"
+            position="0 0 0.09" rotation="0 0 0"></a-entity>
         </a-entity>
+
+        <a-entity id="left-eye" geometry="primitive: sphere; radius: 0.1" material="color: white"
+          position="+0.5 0.2 0.85" rotation="0 0 0" rotate-follow-camera>
+          <a-entity id="left-pupil" geometry="primitive: sphere; radius: 0.02" material="color: black"
+            position="0 0 0.09" rotation="0 0 0"></a-entity>
+        </a-entity>
+
+        <!-- The nose -->
+        <a-entity id="nose" geometry="primitive: cone; radiusBottom: 0.3; radiusTop: 0.1; height:0.3"
+          material="color: green" position="0 0 1" rotation="90 0 0"></a-entity>
       </a-entity>
+    </a-entity>
 
-      <!-- This is the floor and sky (making it a more pleasant color than white)-->
-      <a-entity
-        geometry="primitive: plane; width: 10; height: 10"
-        material="color: #7B9894; side: double"
-        rotation="-90 0 0"
-      ></a-entity>
 
-      <a-sky color="#1C0C2C"></a-sky>
-    </a-scene>
-  </body>
+    <!-- floor -->
+    <a-entity id="floor" geometry="primitive: plane; width: 10; height: 10" material="color: #7B9894; side: double"
+      rotation="-90 0 0"></a-entity>
+
+    <!-- sky -->
+    <a-sky color="#1C0C2C"></a-sky>
+  </a-scene>
+</body>
+
 </html>
